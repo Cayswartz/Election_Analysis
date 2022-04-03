@@ -76,7 +76,7 @@ with open(file_to_save, "w") as txt_file:
 
 
     print("County Votes:")
-    txt_file.write("County Votes:")
+    txt_file.write("County Votes:\n")
 
 ####COUNTY VOTES
 
