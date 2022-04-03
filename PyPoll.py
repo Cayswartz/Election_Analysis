@@ -2,25 +2,24 @@
 # Add our dependencies.
 import csv
 import os
-from telnetlib import STATUS
 # Assign a variable to load a file from a path.
 file_to_load = os.path.join("Resources", "election_results.csv")
 # Assign a variable to save the file to a path.
 file_to_save = os.path.join("analysis", "election_analysis.txt")
+
 # Initialize a total vote counter.
 total_votes = 0
-
 
 # Candidate options and candidate votes.
 candidate_options = []
 candidate_votes = {}
-
 
 # Track the winning candidate, vote count, and percentage.
 winning_candidate = ""
 winning_count = 0
 winning_percentage = 0
 
+# Track the winning county
 winning_county = ""
 winning_county_count = 0
 winning_county_percentage = 0
@@ -51,6 +50,16 @@ with open(file_to_load) as election_data:
         # Add a vote to that candidate's count.
         candidate_votes[candidate_name] += 1
 
+with open(file_to_load) as election_data:
+        file_reader = csv.reader(election_data)
+        header = next(file_reader)
+        for row in file_reader:
+            county_name = row[1]
+            if county_name not in county_options:
+                county_options.append(county_name)
+                county_votes[county_name] = 0
+            county_votes[county_name] += 1
+
 ## TOTAL VOTES
 
 # Save the results to our text file.
@@ -61,10 +70,13 @@ with open(file_to_save, "w") as txt_file:
         f"-------------------------\n"
         f"Total Votes: {total_votes:,}\n"
         f"-------------------------\n")
-    print(election_results, end="")
+    print(election_results)
     # After printing the final vote count to the terminal save the final vote count to the text file.
     txt_file.write(election_results)
 
+with open(file_to_save, "w") as txt_file:
+    print("County Votes:")
+    txt_file.write("County Votes:")
 
 ####COUNTY VOTES
 with open(file_to_save, "w") as txt_file:
@@ -78,9 +90,7 @@ with open(file_to_save, "w") as txt_file:
         txt_file.write(county_results)
 
         if(votes>winning_county_count) and (county_percentage > winning_county_percentage):
-            winning_county_count = votes
             winning_county = county_name
-            winning_county_percentage = county_percentage
     winning_county_summary = (
         f"-------------------------\n"
         f"Largest County Turnout: {winning_county}\n"
@@ -122,13 +132,4 @@ with open(file_to_save, "w") as txt_file:
 
 #### ASSIGNMENT 
 
-with open(file_to_load) as election_data:
-        file_reader = csv.reader(election_data)
-        header = next(file_reader)
-        for row in file_reader:
-            county_name = row[1]
-            if county_name not in county_options:
-                county_options.append(county_name)
-                county_votes[county_name] = 0
-            county_votes[county_name] += 1
 
