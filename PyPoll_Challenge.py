@@ -133,6 +133,5 @@ with open(file_to_save, "w") as txt_file:
     txt_file.write(winning_candidate_summary)
 
 
-#### ASSIGNMENT 
 
 
